@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+svg{
+  /*border: 1px solid;*/
+  text-align: center;
+}
+
+h1{
+  text-align: center;
+}
+h3{
+  text-align: center;
+}
+
+input{   
+  font: 14px;
+  shape-rendering: crispEdges;
+   }
+
+.bar--positive {
+  fill: steelblue;
+}
+
+.bar--negative {
+  fill: darkorange;
+}
+
+.axis text {
+  font: 14px arial;
+  shape-rendering: crispEdges;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+</style>
+<body>
+<h1> U.S. Long Term Budget Outlook
+  </h1>
+
+<h3> 2000 <input type='range' min='2000' max='2046' step='1' value='2000' id='yearRange'/><span id='sliderValue'> 2046</span></h3>
+<!-- This is for the slider !-->
+</body>
+
+<script src="//d3js.org/d3.v3.min.js"></script>
+
+<script>
+
+//Margin conventions
+var margin = {top: 35, right: 20, bottom: 135, left: 60},
+    width = 850 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
+
+//Scales, using ordinal scales. The .15 adds space between the different bars
+var xScale = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .15);
+
+var yScale = d3.scale.linear()
+    .range([height, 5]);
+
+//Add Axes
+var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .orient("0")
+
+var yAxis = d3.svg.axis()
+    .scale(yScale)
+    .orient("left")
+    //.tickFormat(d3.format("0%"))
+    .ticks(height/50)
+    .tickPadding(8)
+
+//Add container to hold the chart
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+//Add colorscale
+var colorScale = d3.scale.category10()
+
+//Add data here
+d3.csv("LTBOFig1-2-00-46tidysimple.csv", function(error, data) {
+  
+  if (error) return console.warn(error);
+ 
+ //Coerce the data to make it read as integers 
+  data.forEach(function(d) {
+      d.fiscalYear = + d.fiscalYear;
+      d.gdp = +d.gdp;
+      })
+      console.log(data);
+
+    xScale.domain(d3.set(data.map(function(d) { return d.category; })).values())
+    yScale.domain([d3.min(data, function(d) { return d.gdp; }), 30]).nice()
+//Nest the data by year
+
+var budgetYearData = d3.nest()
+    .key(function(d){ return d.fiscalYear;})
+    .entries(data)
+
+    console.log(budgetYearData);
+
+
+//Draw the first year
+ var y2015 =  budgetYearData.filter(function(d) { return d.key == '2015'; })
+console.log(y2015[0].values);
+
+
+    var rectangles = svg.selectAll(".barGroups")
+      .data(y2015[0].values)
+      .enter().append("g")
+      .attr("class", "barGroups")
+
+    // Add rectangles, give them dynamic values
+
+    svg.selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", function(d) { return "bar bar--" + (d.gdp < 0 ? "negative" : "positive"); })
+      .attr("x", function(d) { return xScale(d.category); })
+      .attr("y", function(d) { return yScale(Math.max(0, d.barTotal)); })
+      .attr("width", xScale.rangeBand())
+      .attr("height", function(d) { return Math.abs(yScale(d.barTotal)- yScale(0)); })
+ 
+
+    //Give bars a color, based on their group
+        rectangles.select("rect")
+        .style("fill", function(d) { return colorScale(d.category); })
+
+    //Add data labels
+    var bartext = rectangles.selectAll(".bartxt")
+      .data(y2015[0].values)
+      .enter().append("text")
+       .text(function(d){return d.barTotal + "%";})
+       .attr("x", function(d) { return xScale(d.category); })
+       .attr("y", function(d) { return yScale(0);})
+       //I had to do this manually. Is there a CSS way to text-align??
+       //.style("text-align", "centroid")
+       .attr("transform", "translate(45,-80)")
+       .style("font-size","18px")
+       .style('weight', "bold")
+       .style("fill", "black")
+       .style("font-family", "arial")
+       .style("shape-rendering", "crispEdges")
+       ;
+
+
+
+//Within the update chart function, define the bar chart with dynamic values
+
+//Explain what you mean by saying "updateChart" here. dataset will be defined by "d.values" as seen where the updateChart function is called in line 119
+
+  function updateChart(dataset) {
+  
+          //Link data to the x & y scale
+
+          console.log(dataset);
+
+          //Databind
+
+          var updatingRectangles = svg.selectAll(".barGroups")
+            .data(dataset)
+            .transition()
+            .duration(6000)
+            .enter().append("g")
+            .attr("class", "barGroups")
+
+          // Add rectangles, give them dynamic values
+            updatingRectangles.selectAll(".bar")
+            .data(dataset)
+            .enter().append("rect")
+            .transition()
+            .style("fill","orange")
+            .attr("x", function(d) { return xScale(d.category); })
+            .attr("width", xScale.rangeBand())
+            .attr("y", function(d) { return yScale(d.gdp); })
+            .attr("height", function(d) { return height - yScale(d.gdp); })
+            .attr("class", "bar");
+
+
+          //Add data labels
+          var bartext = rectangles.selectAll(".bartxt")
+            .data(dataset)
+            .enter().append("text")
+             .text(function(d){return d.gdp + "%";})
+             .attr("x", function(d) { return xScale(d.category); })
+             .attr("y", 0)
+             .style("font","14px sans-serif")
+             .style('weight', "bold")
+             .style("font-family", "arial")
+             .style("color","white");
+
+
+
+//d3.select("#sliderValue")
+   //       .text(slideValue)
+//THIS ISN"T WORKING- FIGURE IT OUT
+//        var sliderValue =  this.value;
+  //      console.log(sliderValue); 
+  //  })
+
+}
+//This is the end of the updateChart function
+
+//Find slider that already exists in the HTML above
+//Data bind to the data from the nested data. But then what do you append here??
+d3.select("#yearRange")
+  //.data(budgetYearData)
+  //.enter().append("rect")
+  .on("input", function(d) {  
+      var sliderValue =  this.value;
+      console.log(sliderValue);
+      var sliderYearData = budgetYearData.filter(function(d) { return d.key == sliderValue; })
+
+      //THIS ISN"T WORKING HERE
+     // updateChart(budgetYearData[MAKE VARIABLE THAT CHANGES].values, budgetYearData[MAKE VARIABLE THAT CHANGES].key )
+      updateChart(sliderYearData)
+
+      //updateChart(d.values, d.key)
+
+      d3.select("#sliderValue")
+      .text(sliderValue)
+
+    })
+
+
+ // .text(function(d) {return d.fiscalYear;})
+
+//Call the axes after defining the xScale.domain and yScale.domain, but still within the data function
+ svg.append("g")
+    .attr("class", "axis")
+    //.attr("transform","translate(" + width + ",0)")
+    .call(yAxis)
+  svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform","translate(0," + height + ")")
+    .call(xAxis)
+
+
+svg.append("line")
+  .attr("x1", 0)
+  .attr("x2", width)
+//How do you figure out how to get the x axis on the 0 line??
+  .attr("y1", yScale(0))
+  .attr("y2", yScale(0))
+  .style("stroke","#000")
+  .style("shape-rendering", "crispEdges")
+  .style("stroke-width", "1px");
+
+});
+//This is the end of the data function
+
+//Add line to go across at 0 x axis. 
+
+
+//Get the slider to work. Write the final paragraph. Create a popup box that comes when you run through the slider. With Revenue- spending = Surplus/Deficit
+</script>
+
+<body>
+<p> 
+<table>
+<tbody>
+<td>
+Many people confuse the difference between debt and deficits. This is an important distinction. 
+
+A deficit occurs when spending is greater than revenue. Surplus occurs when revenue is greater than revenue. Over time, deficits can add up and increase the debt.
+
+Right now we have a structural mismatch where spending is higher than revenues collected. In fact, the last time the US had a surplus was in 2001, and CBO projects that there will continue to be deficit spending in the future as baby boomers age and the cost of government programs continues to rise, particularly healthcare.
+
+There are 2 possible solutions: Raise revenue to pay for the programs that help to support Americans, or cut these programs to save costs and make government smaller. Spending can be used to invest in future programs, infrastructure and education, but spending too much beyond revenues can cause the debt to rise to unsustainable levels, and place the burden of paying for our services on future generations.
+</td>
+</tbody>
+</table>
+</p>
+</body>
+
+
+
+
+
+
+
