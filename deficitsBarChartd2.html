@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+svg{
+  /*border: 1px solid;*/
+  text-align: center;
+}
+
+h1{
+  text-align: center;
+}
+h2{
+  text-align: center;
+}
+h4{
+  text-align: center;
+  /*padding: 10px 10px 10px 10px;*/
+  font-size: 12px;
+}
+
+input{   
+  font: 14px;
+  shape-rendering: crispEdges;
+   }
+
+.bar--positive {
+  fill: steelblue;
+}
+
+.bar--negative {
+  fill: darkorange;
+}
+
+.axis text {
+  font: 14px arial;
+  shape-rendering: crispEdges;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+</style>
+<body>
+<h1> U.S. Long Term Budget Outlook
+  
+ <p><span id='sliderValue'></span>
+ </p></h1>
+
+<h4><!-- This is for the slider !-->
+2000 <input type='range' 
+ min='2000' 
+ max='2046' 
+ step='1'
+ value= "sliderValue"
+ id='yearRange'
+ />2046
+ </h4>
+
+
+</body>
+
+<script src="//d3js.org/d3.v3.min.js"></script>
+
+<script>
+
+//Margin conventions
+var margin = {top: 35, right: 20, bottom: 135, left: 60},
+    width = 850 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
+
+//Scales, using ordinal scales. The .15 adds space between the different bars
+var xScale = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .15);
+
+var yScale = d3.scale.linear()
+    .range([height, 5]);
+
+//Add Axes
+var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .orient("0")
+
+var yAxis = d3.svg.axis()
+    .scale(yScale)
+    .orient("left")
+    //.tickFormat(d3.format("%"))
+    .ticks(height/50)
+    .tickPadding(8)
+
+//Add container to hold the chart
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+//Add colorscale
+var colorScale = d3.scale.category10()
+
+var sliderValue;
+
+//Add slider here
+
+
+        
+//Add data here  
+//Assign data to request data variable
+var request_data = d3.csv("LTBOFig1-2-00-46tidysimple.csv", function(error, data) {
+
+  if (error) return console.warn(error);
+
+ //Coerce the data to make it read as integers 
+    data.forEach(function(d) {
+      d.fiscalYear = +d.fiscalYear;
+      d.gdp = +d.gdp;
+      d.barTotal =+d.barTotal;
+      })
+
+    console.log(data);
+
+    xScale.domain(d3.set(data.map(function(d) { return d.category; })).values())
+    yScale.domain([d3.min(data, function(d) { return d.barTotal; }), 75]).nice()  
+
+    //Nest the data by year
+
+    var budgetYearData = d3.nest()
+        .key(function(d){ return +d.fiscalYear;})
+        .entries(data);
+         console.log(budgetYearData);
+
+     //Initial value
+     //updateChart(2015);
+      //var initialYear = 2025;
+      //updateChart(initialYear);
+
+           // function(){
+           // 
+           //console.log(sliderValue);
+          //console.log(updateChart(+this.value));
+          //});//
+       
+          
+          //updateChart(selectedYear);
+          //updateChart(sliderValue);
+
+          //console.log(sliderValue);
+
+
+        //console.log(updateChart(2015));
+
+      
+
+    //Once the update function is called, it will use the following code to update Chart
+
+    function updateChart(year) {  
+        
+          //adjust text on the year slider
+          d3.select("#sliderValue").text(year);
+          d3.select("#yearRange").property("value", year);
+
+          sliderYearData = budgetYearData.filter(function(d) { return +d.key == year})
+
+          //console.log(selectedyear);
+          console.log(sliderYearData);
+        
+         //console.log(sliderYearData[0].values);
+
+
+          //To make dynamically changing 
+          //xScale.domain(d3.set(sliderYearData.map(function(d) { return d.category; })).values())
+
+          //yScale.domain([d3.min(sliderYearData, function(d) { return d.barTotal; }), 75])
+          //.nice()
+ 
+          //Groups
+            //UPDATE
+
+    //Create groups
+       var updateGroups = d3.select("svg").selectAll(".bargroups")
+            //.data(sliderYearData[0].values, function(d){return d.values;})
+            .data(sliderYearData[0].values)
+            .enter().append("g")
+            .attr("class", "bargroups")
+            //.exit().remove();
+            //Remove if not necessary
+            //updateGroupExit = updateGroups
+
+     // Add rectangles, give them dynamic values
+          var updateRectangles = updateGroups
+            //.data(function(d){ return d.values;})
+            //.data(sliderYearData[0], function(d){return d.values})
+            //.enter()
+            .append("rect")
+            .attr("class", function(d) { return "bar bar--" + (d.barTotal < 0 ? "negative" : "positive"); })
+            .attr("x", function(d) {return xScale(d.category); })
+            .attr("y", function(d) {return yScale(Math.max(0, d.barTotal)); })
+            .attr("width", xScale.rangeBand())
+            .attr("height", function(d) { return Math.abs(yScale(d.barTotal)- yScale(0)); })
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            //.exit().remove();
+
+        //Add data labels
+        var bartext = updateGroups
+          .append("text")
+           .text(function(d){return d.barTotal + "%";})
+           .attr("x", function(d) { return xScale(d.category); })
+           .attr("y", function(d) { return yScale(0);})
+           //I had to do this manually. Is there a CSS way to text-align??
+           //.style("text-align", "centroid")
+           .attr("transform", "translate(110,-80)")
+           .style("font-size","16px")
+           .style("font-weight","bold")
+           .style("fill", "black")
+           .style("font-family", "arial")
+           .style("shape-rendering", "crispEdges")
+           ;
+
+                
+
+        //Give bars a color, based on their group
+            //rectangleGroup.select("rect")
+            //.style("fill", function(d) { return colorScale(d.category); })
+
+    //var legend = svg.append("g")
+    //  .attr("class","legend")
+
+
+    } //update chart ends 
+
+
+     //Slider here!!
+        d3.select("#yearRange")
+        .on("change", function () {
+            sliderValue= +this.value; 
+            
+           updateChart(+this.value);
+        });
+
+        d3.select("#yearRange")
+          .on("input", function(){
+            sliderValue= +this.value;
+            updateChart(+this.value);
+            d3.select("#yearRange").property("value", sliderValue);
+          });
+
+
+
+//THIS IS WHAT IS BROKEN!!!! 
+//I have identified that this is the PROBLEM WITH THE SLIDER. Aka the update chart function works, the slider itself works, but "console.log(updateChart(sliderValue))" is coming back as undefined. Keeps reading: "TypeError: Cannot read property 'values' of undefined"
+
+
+            //sliderValue = +this.value
+
+        //console.log(sliderValue);
+        
+       //SOMETHING LIKE THIS: #yearRange == d.key
+        //  .enter().append()
+
+        //console.log(updateChart(2000));
+    //  console.log(+this.value);
+    //});
+
+    //updateChart(sliderValue);
+
+//Access the slider that exists above, and calls the calls the updateChart function
+
+//Call the axes after defining the xScale.domain and yScale.domain, but still within the data function
+
+ svg.append("g")
+    .attr("class", "axis")
+    //.attr("transform","translate(" + width + ",0)")
+    .call(yAxis)
+    .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("As a Percentage of GDP");
+
+  svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform","translate(0," + height + ")")
+
+    .call(xAxis)
+     //Angles the text along the axis         
+     //     .selectAll('text')
+     //    .attr('transform', 'rotate(-15)')
+     //    .style('text-anchor', 'end');
+
+svg.append("line")
+  .attr("x1", 0)
+  .attr("x2", width)
+//How do you figure out how to get the x axis on the 0 line??
+  .attr("y1", yScale(0))
+  .attr("y2", yScale(0))
+  .style("stroke","#000")
+  .style("shape-rendering", "crispEdges")
+  .style("stroke-width", "1px")
+
+})
+//This is the end of the data function
+//http://stackoverflow.com/questions/29440365/error-in-redrawing-graph-with-update-function?rq=1
+
+
+//To Do List: Get the slider to work. Write the final paragraph/finalized. Create a popup box that comes when you run through the slider, with Revenue- spending = Surplus/Deficit
+</script>
+
+<body>
+
+  <table>
+    <tbody>
+      <td>
+<h3>What is the difference between the federal debt and federal deficits? </h3>
+
+<p> Many people confuse debt and deficits. This is an important distinction. 
+
+A deficit occurs when spending is greater than revenue. Surplus occurs when revenue is greater than revenue. Over time, deficits can add up and increase the federal debt.
+
+Right now we have a structural mismatch where spending is higher than revenues collected. In fact, the last time the US had a surplus was in 2001, and CBO projects that there will continue to be deficit spending in the future as baby boomers age and the cost of government programs continues to rise, particularly the cost of healthcare.
+
+There are 2 possible solutions: raise revenue to pay for the programs that help to support Americans, or cut these programs to save costs and make government smaller. Spending can be used to invest in future programs, infrastructure and education, but spending too much beyond revenues can cause the debt to rise to unsustainable levels, and place the burden of paying for our services on future generations.
+
+</p>
+      </td>
+    </tbody>
+  </table>
+</p>
+
+</body>
+
+
+
+
+
+
+
