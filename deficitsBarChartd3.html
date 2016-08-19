@@ -35,6 +35,11 @@ input{
 .axis text {
   font: 14px arial;
   shape-rendering: crispEdges;
+  font-weight: bold;
+}
+
+x.axis text {
+  font: 16px arial;
 }
 
 .axis path,
@@ -42,7 +47,10 @@ input{
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
+
 }
+
+.textbox{}
 
 </style>
 <body>
@@ -63,7 +71,7 @@ input{
 
 </body>
 
-<script src="//d3js.org/d3.v3.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
 
 <script>
 
@@ -118,7 +126,7 @@ var colorScale = d3.scale.category10()
     console.log(data);
 
     xScale.domain(d3.set(data.map(function(d) { return d.category; })).values())
-    yScale.domain([d3.min(data, function(d) { return d.barTotal; }), 75]).nice()  
+    yScale.domain([d3.min(data, function(d) { return d.barTotal; }), 30]).nice()  
 
 var sliderValue;    
 
@@ -129,10 +137,6 @@ var sliderValue;
         .entries(data);
          console.log(budgetYearData);
 
-    //Add slider here
-    //THIS IS WHAT IS BROKEN!!!! 
-    //I have identified that this is the PROBLEM WITH THE SLIDER. Aka the update chart function works, the slider itself works, and the data filtering works, according to the console.log but "console.log(updateChart(sliderValue))" is coming back as undefined. Keeps reading: "TypeError: Cannot read property 'values' of undefined"
-
 //Initial value
   var initialValue = 2015;
   updateChart(initialValue);
@@ -140,6 +144,10 @@ var sliderValue;
     var slider= d3.select("#yearRange")
                   .on("input", function(){
                       sliderValue= +this.value;
+                      
+                      //remove old bars so that the update will work
+                      d3.select("svg").selectAll(".bargroups").remove(); 
+
                     console.log(sliderValue);
                     updateChart(sliderValue);
                //updateChart(function(d){ return +this.value});
@@ -198,7 +206,7 @@ var sliderValue;
            .text(function(d){return d.barTotal + "%";})
            .attr("x", function(d) { return xScale(d.category); })
            .attr("y", function(d) { return yScale(0);})
-           .attr("transform", "translate(110,-80)")
+           .attr("transform", "translate(110,-30)")
            .style("font-size","16px")
            .style("font-weight","bold")
            .style("fill", "black")
@@ -210,6 +218,21 @@ var sliderValue;
             //rectangleGroup.select("rect")
             //.style("fill", function(d) { return colorScale(d.category); })
 
+      //Legend
+
+    var box = updateGroups.append("g")
+        .attr("class", "textbox")
+        .append("text")
+        .attr("transform", "rotate(0)")
+        .attr("x", 145)
+        .attr("y", -50)
+        .attr("dy", ".5em")
+        .style("text-anchor", "end")
+        .style("font-weight", "bold")
+        .text("THIS IS TEXT")
+        .style("font-size", "12px")
+
+            
     } //update chart ends 
 
 //Call the axes after defining the xScale.domain and yScale.domain, but still within the data function
@@ -219,10 +242,12 @@ var sliderValue;
     //.attr("transform","translate(" + width + ",0)")
     .call(yAxis)
     .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 10)
+        .attr("transform", "rotate(0)")
+        .attr("x", 145)
+        .attr("y", -20)
         .attr("dy", ".5em")
         .style("text-anchor", "end")
+        .style("font-weight", "bold")
         .text("As a Percentage of GDP")
         .style("font-size", "12px")
 
@@ -259,16 +284,15 @@ svg.append("line")
   <table>
     <tbody>
       <td>
-      <!-- Text
-<h3>What is the difference between the federal debt and federal deficits? </h3>
+<h2>Q. What is the difference between the federal debt and federal deficits? </h2>
 
-<p> Many people confuse debt and deficits. This is an important distinction. 
+<p> <h3>A. Deficits are the . Debt is the cumulative effect of annual deficits.</h3>
 
-A deficit occurs when spending is greater than revenue. Surplus occurs when revenue is greater than revenue. Over time, deficits can add up and increase the federal debt.
+A budget deficit occurs when annual spending is greater than revenue. A budget surplus occurs when revenue is greater than spending. Over time, annual deficits add up and increase the federal debt.
 
 Right now we have a structural mismatch where spending is higher than revenues collected. In fact, the last time the US had a surplus was in 2001, and CBO projects that there will continue to be deficit spending in the future as baby boomers age and the cost of government programs continues to rise, particularly the cost of healthcare.
 
-There are 2 possible solutions: raise revenue to pay for the programs that help to support Americans, or cut these programs to save costs and make government smaller. Spending can be used to invest in future programs, infrastructure and education, but spending too much beyond revenues can cause the debt to rise to unsustainable levels, and place the burden of paying for our services on future generations.
+There are a number of possible solutions: raise revenue to pay for the programs that help to support Americans, or cut these programs to save costs and make government smaller. Spending can be used to invest in future programs, infrastructure and education, but spending too much beyond revenues can cause the debt to rise to unsustainable levels, and place the burden of paying for our services on future generations.
 
 </p>!-->
       </td>
