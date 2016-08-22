@@ -24,11 +24,11 @@ input{
   shape-rendering: crispEdges;
    }
 
-.bar--positive {
+.bar--Surplus {
   fill: steelblue;
 }
 
-.bar--negative {
+.bar--Deficit {
   fill: darkorange;
 }
 
@@ -50,7 +50,12 @@ x.axis text {
 
 }
 
-.textbox{}
+.textbox{
+  border:5px solid #7f7f7f;
+  padding: 20px;
+}
+
+
 
 </style>
 <body>
@@ -146,7 +151,8 @@ var sliderValue;
                       sliderValue= +this.value;
                       
                       //remove old bars so that the update will work
-                      d3.select("svg").selectAll(".bargroups").remove(); 
+                      d3.select("svg").selectAll(".bargroups").remove();
+                      d3.selectAll(".posNeg").remove();  
 
                     console.log(sliderValue);
                     updateChart(sliderValue);
@@ -193,7 +199,7 @@ var sliderValue;
      // Add rectangles, give them dynamic values
           var updateRectangles = updateGroups
             .append("rect")
-            .attr("class", function(d) { return "bar bar--" + (d.barTotal < 0 ? "negative" : "positive"); })
+            .attr("class", function(d) { return "bar bar--" + (d.barTotal < 0 ? "Deficit" : "Surplus"); })
             .attr("x", function(d) {return xScale(d.category); })
             .attr("y", function(d) {return yScale(Math.max(0, d.barTotal)); })
             .attr("width", xScale.rangeBand())
@@ -223,16 +229,70 @@ var sliderValue;
     var box = updateGroups.append("g")
         .attr("class", "textbox")
         .append("text")
-        .attr("transform", "rotate(0)")
-        .attr("x", 145)
-        .attr("y", -50)
-        .attr("dy", ".5em")
-        .style("text-anchor", "end")
+        //.attr("transform", "rotate(0)")
+        .attr("x", 170)
+        .attr("y", 250)
+        .attr("dy", "5em")
+        //.style("text-anchor", "end")
         .style("font-weight", "bold")
-        .text("THIS IS TEXT")
-        .style("font-size", "12px")
+        .text("Revenues - Spending = " + "Federal " )
+        .attr("dy", "5em")
+        .style("font-size","24px")
+        .style("font-family", "arial")
 
-            
+        updateGroups.append("text")
+        .attr("class", "posNeg")
+        //FIX THIS!!
+        .text( function(d){ return ( d.category == "Deficit" && d.barTotal < 0 ? "Deficit" : "Surplus")})
+        .attr("x", 470)
+        .attr("y", 250)
+        .attr("dy", "5em")
+        //.select("text").remove();
+        
+  
+        .text(function(d) { return "Revenues - Spending = " + (d.barTotal < 0 ? "Deficit" : "Surplus")})
+        //.append("text")
+
+        updateGroups.append("text")
+        .text(function(d){ return (d.category == "Revenues"? d.barTotal + "%   " + " - ": "")})
+        .attr("x", 200)
+        .attr("y", 395)
+        .attr("dy", ".5em")
+         .style("font-size","24px")
+        .style("font-family", "arial")
+        
+        updateGroups.append("text")
+        .text(function(d){ return (d.category == "Spending"? d.barTotal+ "% " + "   =": "")})
+        .attr("x", 335)
+        .attr("y", 395)
+        .attr("dy", ".5em")
+         .style("font-size","24px")
+        .style("font-family", "arial")
+
+        updateGroups.append("text")
+        .text(function(d){ return (d.category == "Deficit"? d.barTotal + "%": "" )})
+        .attr("x", 460)
+        .attr("y", 395)
+        .attr("dy", ".5em")
+         .style("font-size","24px")
+        .style("font-family", "arial")
+        
+      
+        // Spending: sliderYearData[0].values[0]
+        // Revenues: sliderYearData[0].values[6] 
+        // Deficits: sliderYearData[0].values[8]
+
+        //.append("text")
+        //.text(function(d){return sliderYearData[0].values[0] + ": " + d.barTotal + "%";})
+           //.attr("x", function(d) { return xScale(d.category); }) d.barTotal " - " + d.spending " = " + d.deficit;) 
+        //function(d) { return "bar bar--" + (d.barTotal < 0 ? "deficit" : "surplus");)
+        
+           //.style("font-weight","bold")
+           //.style("fill", "black")
+           
+           //.style("shape-rendering", "crispEdges")
+
+         
     } //update chart ends 
 
 //Call the axes after defining the xScale.domain and yScale.domain, but still within the data function
@@ -284,17 +344,19 @@ svg.append("line")
   <table>
     <tbody>
       <td>
+      <!--
 <h2>Q. What is the difference between the federal debt and federal deficits? </h2>
 
-<p> <h3>A. Deficits are the . Debt is the cumulative effect of annual deficits.</h3>
+<p> <h3>ADD IN BLOG POST</h3>
 
-A budget deficit occurs when annual spending is greater than revenue. A budget surplus occurs when revenue is greater than spending. Over time, annual deficits add up and increase the federal debt.
+ A budget deficit occurs when annual spending is greater than revenue. A budget surplus occurs when revenue is greater than spending. Over time, annual deficits add up and increase the federal debt.
 
 Right now we have a structural mismatch where spending is higher than revenues collected. In fact, the last time the US had a surplus was in 2001, and CBO projects that there will continue to be deficit spending in the future as baby boomers age and the cost of government programs continues to rise, particularly the cost of healthcare.
 
 There are a number of possible solutions: raise revenue to pay for the programs that help to support Americans, or cut these programs to save costs and make government smaller. Spending can be used to invest in future programs, infrastructure and education, but spending too much beyond revenues can cause the debt to rise to unsustainable levels, and place the burden of paying for our services on future generations.
 
 </p>!-->
+
       </td>
     </tbody>
   </table>
