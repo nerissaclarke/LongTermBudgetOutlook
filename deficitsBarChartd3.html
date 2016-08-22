@@ -235,7 +235,7 @@ var sliderValue;
         .attr("dy", "5em")
         //.style("text-anchor", "end")
         .style("font-weight", "bold")
-        .text("Revenues - Spending = " + "Federal " )
+        .text("Revenues - Spending = " + "Federal Deficits" )
         .attr("dy", "5em")
         .style("font-size","24px")
         .style("font-family", "arial")
@@ -250,7 +250,7 @@ var sliderValue;
         //.select("text").remove();
         
   
-        .text(function(d) { return "Revenues - Spending = " + (d.barTotal < 0 ? "Deficit" : "Surplus")})
+        //.text(function(d) { return "Revenues - Spending = " + (d.barTotal < 0 ? "Deficit" : "Surplus")})
         //.append("text")
 
         updateGroups.append("text")
