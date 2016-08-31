@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+@import 'https://fonts.googleapis.com/css?family=BenchNine:300|Cabin+Condensed:400,700|Catamaran:100|Crimson+Text|Francois+One|Heebo:500|Nobile|Noto+Sans|Oswald:300,400,700|Oxygen:300|PT+Sans+Caption|PT+Serif|Pontano+Sans|Poppins:300|Raleway:400,700';
+  {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    box-sizing: border-box;
+    text-rendering: optimizeLegibility;
+  }
+
+/*
+font-family: 'BenchNine', sans-serif;
+font-family: 'Cabin Condensed', sans-serif;
+font-family: 'Crimson Text', serif;
+font-family: 'Francois One', sans-serif;
+font-family: 'Nobile', sans-serif;
+font-family: 'Oswald', sans-serif;
+font-family: 'PT Sans Caption', sans-serif;
+font-family: 'PT Serif', serif;
+font-family: 'Pontano Sans', sans-serif;
+font-family: 'Raleway', sans-serif;
+font-family: 'Noto Sans', sans-serif;
+font-family: 'Oxygen', sans-serif;
+font-family: 'Poppins', sans-serif;
+font-family: 'Catamaran', sans-serif;
+font-family: 'Heebo', sans-serif;
+*/
+
+svg{
+  /*border: 1px solid black;*/
+  display: block;
+  align: center;
+}
+
+h2{
+  font-size: 16px;
+  padding: 0px 10px 0px 10px;
+  font-family: 'Heebo', sans-serif;
+  shape-rendering: crispEdges;
+}
+
+input{   
+  text-align: left;
+   }
+
+div {
+      width: 250px;
+      height: 100px;
+      line-height: 100px;
+      text-align: center;
+      fill: green;
+      font-family: 'Heebo', sans-serif;
+      border: 1px solid #123456;
+    }
+
+span {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+.header{
+  font-family: 'Heebo', sans-serif;
+  font-size: 50px;
+  /*font-weight: bold;*/
+  vertical-align: top;
+  text-anchor: middle;
+  fill: #0067b1;
+}
+
+.title{
+  font-family: 'Heebo', sans-serif;
+  font-size: 50px;
+}
+
+.footer{
+  font-size: 11px;
+  font-family: 'helvetica'; 
+}
+
+.bar--Surplus {
+  fill: #0067b1;
+}
+
+.bar--Deficit {
+  fill: #be1e2d;
+}
+
+.x.axis text {
+  font-size: 19px;
+  font-family: 'Heebo', sans-serif;
+  shape-rendering: crispEdges;
+ /*font-weight: bold;*/
+  padding: 20px 10px 10px 10px;
+}
+
+.y.axis text {
+font-size: 18px;
+ font-family: 'Heebo', sans-serif;
+  /*shape-rendering: crispEdges;*/
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.text {
+  font-family: 'Heebo', sans-serif;
+  font-size: 18px;
+  text-anchor: start;
+  display: inline-block;
+  vertical-align: middle;
+  shape-rendering: crispEdges;
+  border: 1px solid black;
+  /*font-weight: bold;  //border:1px solid black;
+  padding: 10px;*/
+ /*font-weight: bold;*/
+  padding: 20px 10px 10px 10px;
+}
+
+</style>
+<body>
+
+ <h2><!-- This is for the slider !-->
+2000 <input type='range' 
+ min='2000' 
+ max='2046' 
+ step='1'
+ id='yearRange'
+ />2046
+ </h2>
+
+</body>
+
+<script src="https://d3js.org/d3.v3.min.js"></script>
+
+<script>
+
+//Margin conventions
+var margin = {top: 150, right: 50, bottom: 85, left: 70},
+    width = 850 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
+
+//Scales, using ordinal scales. The .15 adds space between the different bars
+var xScale = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .15);
+
+var yScale = d3.scale.linear()
+    .range([height, 5]);
+
+//format Percent
+var formatPercent = d3.format("%");
+
+//Add Axes
+var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .orient("0")
+
+var yAxis = d3.svg.axis()
+    .scale(yScale)
+    .orient("left")
+    .tickFormat(formatPercent)
+    .ticks(height/50)
+    .tickPadding(8)
+
+//Add container to hold the chart
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+//Add colorscale
+var colorScale = d3.scale.category10()
+
+//Add data here  
+//Assign data to request data variable
+ d3.csv("LTBOFig1-2-00-46tidysimplev2.csv", function(error, data) {
+
+  if (error) return console.warn(error);
+
+ //Coerce the data to make it read as integers 
+    data.forEach(function(d) {
+      d.fiscalYear = +d.fiscalYear;
+      d.gdp = +d.gdp;
+      d.barTotal =+d.barTotal;
+      })
+
+    console.log(data);
+
+    xScale.domain(d3.set(data.map(function(d) { return d.category; })).values())
+    yScale.domain([d3.min(data, function(d) { return d.barTotal; }), .30]).nice()  
+
+//Nest the data by year
+ var budgetYearData = d3.nest()
+        .key(function(d){ return +d.fiscalYear;})
+        .entries(data);
+         console.log(budgetYearData);
+
+//Initial value
+  var initialValue = 2015;
+  updateChart(initialValue);
+
+     d3.select("#yearRange")
+                  .on("input", function(){
+                      sliderValue= +this.value;
+                      
+                      //remove old bars so that the update will work
+                      d3.select("svg").selectAll(".bargroups").remove();
+                      d3.selectAll(".posNeg").remove(); 
+                      d3.selectAll(".title").remove();
+                      d3.selectAll(".text").remove();  
+
+                    //console.log(sliderValue);
+                    updateChart(sliderValue);
+
+                      //updateChart(function(d){ return +this.value});
+                      });
+
+    //Once the update function is called, it will use the following code to update Chart
+
+    function updateChart(year) {  
+
+          var yeartitle = svg.append("text")
+                      .attr("class", "title")
+                      .attr("dx", "-.35em")
+                      .attr("dy", "-1.75em")
+                      .style("text-anchor", "start")
+                      .style("font-size", "60px")
+                      .style("font-weight", "bold")
+                      .text(year);     
+
+          //adjust text on the year slider
+          d3.select("#sliderValue").text(year);
+          d3.select("#yearRange").property("value", year);
+
+          var sliderYearData = budgetYearData.filter(function(d) { return +d.key == +year;})
+ 
+  //Groups
+    //UPDATE
+
+    //Create groups
+       var updateGroups = d3.select("svg").selectAll(".bargroups")
+            .data(sliderYearData[0].values)
+            .enter().append("g")
+            .attr("class", "bargroups")
+
+     // Add rectangles, give them dynamic values
+          var updateRectangles = updateGroups
+            .append("rect")
+            .attr("class", function(d) { return "bar bar--" + (d.barTotal < 0 ? "Deficit" : "Surplus"); })
+            .attr("x", function(d) {return xScale(d.category); })
+            .attr("y", function(d) {return yScale(Math.max(0, d.barTotal)); })
+            .attr("width", xScale.rangeBand())
+            .attr("height", function(d) { return Math.abs(yScale(d.barTotal)- yScale(0)); })
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+        //Add data labels
+        var bartext = updateGroups
+          .append("text")
+          .attr("class", "text")
+           .text(function(d){return formatPercent(d.barTotal) ;})
+           .attr("x", function(d) { return xScale(d.category); })
+           .attr("y", function(d) { return yScale(0);})
+           .attr("transform", "translate(115,90)")
+           .style("font-size","18px")
+           //.style("font-weight","bold")
+           //.style("fill", "black");  
+
+//Add legend
+var textGroup = d3.select("svg").selectAll(".textgroup")
+        .data(sliderYearData[0].values)
+        .enter().append("g")
+        .attr("class", "text");
+  
+  //textGroup.append("text")
+  //.text( "Federal Revenues - Federal Spending = Annual Surplus or Deficit")
+  //.attr("x", 0)
+  //.attr("y", height)
+  //.attr("x", function(d) { return xScale(d.category); })
+  //.attr("y", function(d) { return yScale(0);})
+  //.attr("transform", "translate(95,105)")
+  //.style("fill", "#0067b1")
+
+ //Deficits Equation title
+  textGroup.append("text")
+  .text( "Revenues - Spending = Annual Surplus or Deficit")
+  .attr("x", "9em")
+  .attr("transform", "translate(210,80)")
+  //.style("fill", "#0067b1")
+
+  //Add data labels below
+        textGroup
+          .append("text")
+           .text(function(d){return formatPercent(d.barTotal) ;})
+           .attr("class", function(d) { return "bar bar--" + (d.barTotal < 0 ? "Deficit" : "Surplus"); })
+           .attr("x", function(d) { return xScale(d.category); })
+           .attr("y", function(d) { return yScale(0);})
+           .style("font-weight", "bold")
+           .style("font-family", "'Francois', sans-serif")
+           .style("shape-rendering", "crispEdges")
+           .style("font-size", "24px")
+           //.style("fill", "#0067b1")
+           .attr("transform", "translate(113,490)")
+
+      textGroup.append("g")
+        .attr("class", "text")
+        .append("text")
+        .text("-")
+        .attr("x", 220)
+        .attr("y", 537)
+
+      textGroup.append("g")
+        .attr("class", "text")
+        .append("text")
+        .text("=")
+        .attr("x", 360)
+        .attr("y", 537)
+     
+      textGroup.append("g")
+        .attr("class", "text")
+        .append("text")
+        .text("or")
+        .attr("x", 500)
+        .attr("y", 537)
+
+      textGroup.append("g")
+        .attr("class", "text")
+        .append("text")
+        .text("-")
+        .attr("x", 220)
+        .attr("y", 563)
+
+      textGroup.append("g")
+        .attr("class", "text")
+        .append("text")
+        .text("=")
+        .attr("x", 360)
+        .attr("y", 563)
+              
+    } //update chart ends 
+
+//Call the axes after defining the xScale.domain and yScale.domain, but still within the data function
+
+ svg.append("g")
+    .attr("class", "y axis")
+    //.attr("transform","translate(" + width + ",0)")
+    .call(yAxis)
+    .append("text")
+        .attr("transform", "rotate(0)")
+        .attr("x", 145)
+        .attr("y", -20)
+        .attr("dx", ".5em")
+        .attr("dy", ".35em")
+        .style("text-anchor", "end")
+        //.style("font-weight", "bold")
+        .text("As a Percentage of GDP")
+        .style("font-size", "14px")
+
+  svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform","translate(0," + height + ")")
+
+    .call(xAxis)
+     
+     //Angles the text along the axis         
+     //     .selectAll('text')
+     //    .attr('transform', 'rotate(-15)')
+     //    .style('text-anchor', 'end');
+
+svg.append("line")
+  .attr("x1", 0)
+  .attr("x2", width)
+  .attr("y1", yScale(0))
+  .attr("y2", yScale(0))
+  .style("stroke","#000")
+  .style("shape-rendering", "crispEdges")
+  .style("stroke-width", "1px")
+
+svg.append("line")
+  .attr("x1", 578)
+  .attr("x2", 578)
+  .attr("y1", 0)
+  .attr("y2", height + 50)
+  .style("stroke","#7f7f7f")
+  .style("stroke-dasharray", "5px")
+  .style("shape-rendering", "crispEdges")
+  .style("stroke-width", "1.25px")
+
+//Title
+var LTBOheader = svg.append("text")
+          .attr("class", "header")
+          .attr("dx", "10em")
+          .attr("dy", "-2.26em")
+          .text("Federal Budget Outlook")
+
+var source = svg.append("text")
+          .attr("class", "footer")
+          .attr("dx", "-5.5em")
+          .attr("dy", "40.5em")
+          .text("SOURCE: Congressional Budget Office, Long-Term Budget Outlook, July 2016. Compiled by PGPF.")
+          //.style("font-family", "'oswald', light")
+
+d3.select("svg").append("div").attr("x", "500px").attr("y","height")
+
+})
+//This is the end of the data function
+
+//NOTES:
+//This is an example of a slider that works to update data: http://stackoverflow.com/questions/29440365/error-in-redrawing-graph-with-update-function?rq=1
+</script>
+
+
+

@@ -3,18 +3,18 @@
 <style>
 
 svg{
-  /*border: 1px solid;*/
+  border: 1px solid black;
   text-align: center;
 }
 
 h1{
-  text-align: center;
+  /*text-align: center;*/
 }
 h2{
-  text-align: center;
+  /*text-align: center;*/
 }
 h4{
-  text-align: center;
+  /*text-align: center;
   /*padding: 10px 10px 10px 10px;*/
   font-size: 12px;
 }
@@ -35,7 +35,7 @@ input{
 .axis text {
   font: 14px arial;
   shape-rendering: crispEdges;
-  font-weight: bold;
+  /*font-weight: bold;*/
 }
 
 x.axis text {
@@ -47,7 +47,6 @@ x.axis text {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
-
 }
 
 .textbox{
@@ -59,10 +58,13 @@ x.axis text {
 
 </style>
 <body>
-<h1> U.S. Long Term Budget Outlook
-  
- <p><span id='sliderValue'></span>
- </p></h1>
+<div>
+  <h1> Long Term Budget Outlook
+    <p>
+  <span id='sliderValue'></span>
+    </p>
+  </h1>
+ </div>
 
 <h4><!-- This is for the slider !-->
 2000 <input type='range' 
@@ -81,7 +83,7 @@ x.axis text {
 <script>
 
 //Margin conventions
-var margin = {top: 35, right: 20, bottom: 135, left: 60},
+var margin = {top: 200, right: 50, bottom: 50, left: 60},
     width = 850 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
@@ -212,17 +214,13 @@ var sliderValue;
            .text(function(d){return d.barTotal + "%";})
            .attr("x", function(d) { return xScale(d.category); })
            .attr("y", function(d) { return yScale(0);})
-           .attr("transform", "translate(110,-30)")
+           .attr("transform", "translate(110,140)")
            .style("font-size","16px")
            .style("font-weight","bold")
            .style("fill", "black")
            .style("font-family", "arial")
            .style("shape-rendering", "crispEdges")
            ;               
-
-        //Give bars a color, based on their group
-            //rectangleGroup.select("rect")
-            //.style("fill", function(d) { return colorScale(d.category); })
 
       //Legend
 
@@ -231,18 +229,17 @@ var sliderValue;
         .append("text")
         //.attr("transform", "rotate(0)")
         .attr("x", 170)
-        .attr("y", 250)
+        .attr("y", -55)
         .attr("dy", "5em")
-        //.style("text-anchor", "end")
-        .style("font-weight", "bold")
-        .text("Revenues - Spending = " + "Federal Deficits" )
-        .attr("dy", "5em")
+        .style("text-anchor", "inherit")
+       // .style("font-weight", "bold")
+        .text("Revenues - Spending" + "   =   " + "Federal Deficits" )
+        //.attr("dy", "5em")
         .style("font-size","24px")
         .style("font-family", "arial")
 
         updateGroups.append("text")
         .attr("class", "posNeg")
-        //FIX THIS!!
         //.text( function(d){ return ( d.category == "Deficit" && d.barTotal < 0 ? "Deficit" : "Surplus")})
         .attr("x", 470)
         .attr("y", 250)
@@ -256,15 +253,15 @@ var sliderValue;
         updateGroups.append("text")
         .text(function(d){ return (d.category == "Revenues"? d.barTotal + "%   " + " - ": "")})
         .attr("x", 200)
-        .attr("y", 395)
+        .attr("y", 100)
         .attr("dy", ".5em")
          .style("font-size","24px")
         .style("font-family", "arial")
         
         updateGroups.append("text")
-        .text(function(d){ return (d.category == "Spending"? d.barTotal+ "% " + "   =": "")})
+        .text(function(d){ return (d.category == "Spending"? d.barTotal+ "% " + "     =": "")})
         .attr("x", 335)
-        .attr("y", 395)
+        .attr("y", 100)
         .attr("dy", ".5em")
          .style("font-size","24px")
         .style("font-family", "arial")
@@ -272,7 +269,7 @@ var sliderValue;
         updateGroups.append("text")
         .text(function(d){ return (d.category == "Deficit"? d.barTotal + "%": "" )})
         .attr("x", 460)
-        .attr("y", 395)
+        .attr("y", 100)
         .attr("dy", ".5em")
          .style("font-size","24px")
         .style("font-family", "arial")
