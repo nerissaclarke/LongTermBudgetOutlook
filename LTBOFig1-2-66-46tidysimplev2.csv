@@ -1,0 +1,325 @@
+fiscalYear,gdp,category,barTotal
+1966,16.7,Revenues,
+1966,17.2,Total Spending,
+1966,-0.5,Deficit,
+1966,33.7,Debt,-0.33725
+1967,17.8,Revenues,-0.31809
+1967,18.8,Total Spending,-0.32197
+1967,-1.0,Deficit,-0.28312
+1967,31.8,Debt,-0.26995
+1968,17.0,Revenues,
+1968,19.8,Total Spending,
+1968,-2.8,Deficit,
+1968,32.2,Debt,-0.32197
+1969,19.0,Revenues,-0.28312
+1969,18.7,Total Spending,-0.26995
+1969,0.3,Surplus,
+1969,28.3,Debt,-0.28312
+1970,18.4,Revenues,
+1970,18.7,Total Spending,
+1970,-0.3,Deficit,
+1970,27.0,Debt,-0.26995
+1971,16.7,Revenues,
+1971,18.8,Total Spending,
+1971,-2.1,Deficit,
+1971,27.1,Debt,-0.27074
+1972,17.0,Revenues,
+1972,18.9,Total Spending,
+1972,-1.9,Deficit,
+1972,26.4,Debt,-0.26436
+1973,17.0,Revenues,
+1973,18.1,Total Spending,
+1973,-1.1,Deficit,
+1973,25.1,Debt,-0.2514
+1974,17.7,Revenues,
+1974,18.1,Total Spending,
+1974,-0.4,Deficit,
+1974,23.1,Debt,-0.23126
+1975,17.3,Revenues,
+1975,20.6,Total Spending,
+1975,-3.3,Deficit,
+1975,24.5,Debt,-0.24506
+1976,16.6,Revenues,
+1976,20.8,Total Spending,
+1976,-4.1,Deficit,
+1976,26.7,Debt,-0.26667
+1977,17.5,Revenues,
+1977,20.2,Total Spending,
+1977,-2.6,Deficit,
+1977,27.1,Debt,-0.27071
+1978,17.5,Revenues,
+1978,20.1,Total Spending,
+1978,-2.6,Deficit,
+1978,26.6,Debt,-0.26649
+1979,18.0,Revenues,
+1979,19.6,Total Spending,
+1979,-1.6,Deficit,
+1979,24.9,Debt,-0.24914
+1980,18.5,Revenues,
+1980,21.1,Total Spending,
+1980,-2.6,Deficit,
+1980,25.5,Debt,-0.25455
+1981,19.1,Revenues,
+1981,21.6,Total Spending,
+1981,-2.5,Deficit,
+1981,25.2,Debt,-0.25153
+1982,18.6,Revenues,
+1982,22.5,Total Spending,
+1982,-3.9,Deficit,
+1982,27.9,Debt,-0.279
+1983,17.0,Revenues,
+1983,22.8,Total Spending,
+1983,-5.9,Deficit,
+1983,32.1,Debt,-0.32117
+1984,16.9,Revenues,
+1984,21.5,Total Spending,
+1984,-4.7,Deficit,
+1984,33.1,Debt,-0.33064
+1985,17.2,Revenues,
+1985,22.2,Total Spending,
+1985,-5.0,Deficit,
+1985,35.3,Debt,-0.35296
+1986,17.0,Revenues,
+1986,21.8,Total Spending,
+1986,-4.9,Deficit,
+1986,38.4,Debt,-0.38373
+1987,17.9,Revenues,
+1987,21.0,Total Spending,
+1987,-3.1,Deficit,
+1987,39.5,Debt,-0.39519
+1988,17.6,Revenues,
+1988,20.6,Total Spending,
+1988,-3.0,Deficit,
+1988,39.8,Debt,-0.39798
+1989,17.8,Revenues,
+1989,20.5,Total Spending,
+1989,-2.7,Deficit,
+1989,39.3,Debt,-0.3933
+1990,17.4,Revenues,
+1990,21.2,Total Spending,
+1990,-3.7,Deficit,
+1990,40.8,Debt,-0.40773
+1991,17.3,Revenues,
+1991,21.7,Total Spending,
+1991,-4.4,Deficit,
+1991,44.0,Debt,-0.44009
+1992,17.0,Revenues,
+1992,21.5,Total Spending,
+1992,-4.5,Deficit,
+1992,46.6,Debt,-0.46618
+1993,17.0,Revenues,
+1993,20.7,Total Spending,
+1993,-3.8,Deficit,
+1993,47.8,Debt,-0.47806
+1994,17.5,Revenues,
+1994,20.3,Total Spending,
+1994,-2.8,Deficit,
+1994,47.7,Debt,-0.47696
+1995,17.8,Revenues,
+1995,20.0,Total Spending,
+1995,-2.2,Deficit,
+1995,47.5,Debt,-0.4753
+1996,18.2,Revenues,
+1996,19.6,Total Spending,
+1996,-1.3,Deficit,
+1996,46.8,Debt,-0.46803
+1997,18.6,Revenues,
+1997,18.9,Total Spending,
+1997,-0.3,Deficit,
+1997,44.5,Debt,-0.44468
+1998,19.2,Revenues,
+1998,18.5,Total Spending,
+1998,0.8,Surplus,
+1998,41.6,Debt,-0.41554
+1999,19.2,Revenues,
+1999,17.9,Total Spending,
+1999,1.3,Surplus,
+1999,38.2,Debt,-0.38193
+2000,20.0,Revenues,
+2000,17.6,Total Spending,
+2000,2.3,Surplus,
+2000,33.6,Debt,-0.336
+2001,18.8,Revenues,
+2001,17.6,Total Spending,
+2001,1.2,Surplus,
+2001,31.4,Debt,-0.31422
+2002,17.0,Revenues,
+2002,18.5,Total Spending,
+2002,-1.5,Deficit,
+2002,32.6,Debt,-0.3255
+2003,15.7,Revenues,
+2003,19.1,Total Spending,
+2003,-3.3,Deficit,
+2003,34.5,Debt,-0.34533
+2004,15.6,Revenues,
+2004,19.0,Total Spending,
+2004,-3.4,Deficit,
+2004,35.5,Debt,-0.35534
+2005,16.7,Revenues,
+2005,19.2,Total Spending,
+2005,-2.5,Deficit,
+2005,35.6,Debt,-0.35629
+2006,17.6,Revenues,
+2006,19.4,Total Spending,
+2006,-1.8,Deficit,
+2006,35.3,Debt,-0.35287
+2007,17.9,Revenues,
+2007,19.1,Total Spending,
+2007,-1.1,Deficit,
+2007,35.2,Debt,-0.35154
+2008,17.1,Revenues,
+2008,20.2,Total Spending,
+2008,-3.1,Deficit,
+2008,39.3,Debt,-0.39336
+2009,14.6,Revenues,
+2009,24.4,Total Spending,
+2009,-9.8,Deficit,
+2009,52.3,Debt,-0.52341
+2010,14.6,Revenues,
+2010,23.4,Total Spending,
+2010,-8.7,Deficit,
+2010,60.9,Debt,-0.60945
+2011,15.0,Revenues,
+2011,23.4,Total Spending,
+2011,-8.5,Deficit,
+2011,65.9,Debt,-0.65857
+2012,15.3,Revenues,
+2012,22.1,Total Spending,
+2012,-6.8,Deficit,
+2012,70.4,Debt,-0.70387
+2013,16.8,Revenues,
+2013,20.9,Total Spending,
+2013,-4.1,Deficit,
+2013,72.6,Debt,-0.72631
+2014,17.6,Revenues,
+2014,20.4,Total Spending,
+2014,-2.8,Deficit,
+2014,74.4,Debt,-0.74373
+2015,18.2,Revenues,
+2015,20.7,Total Spending,
+2015,-2.5,Deficit,
+2015,73.6,Debt,-0.73649
+2016,8.8,Revenues,
+2016,4.9,Total Spending,
+2016,-2.9,Deficit,
+2016,-75,Debt,-0.75
+2017,9,Revenues,
+2017,4.9,Total Spending,
+2017,-2.8,Deficit,
+2017,-76,Debt,-0.76
+2018,9.1,Revenues,
+2018,5,Total Spending,
+2018,-2.7,Deficit,
+2018,-75,Debt,-0.75
+2019,9.2,Revenues,
+2019,5.1,Total Spending,
+2019,-3.4,Deficit,
+2019,-76,Debt,-0.76
+2020,9.2,Revenues,
+2020,5.2,Total Spending,
+2020,-3.7,Deficit,
+2020,-77,Debt,-0.77
+2021,9.3,Revenues,
+2021,5.3,Total Spending,
+2021,-3.9,Deficit,
+2021,-78,Debt,-0.78
+2022,9.3,Revenues,
+2022,5.4,Total Spending,
+2022,-4.4,Deficit,
+2022,-80,Debt,-0.80
+2023,9.4,Revenues,
+2023,5.6,Total Spending,
+2023,-4.4,Deficit,
+2023,-81,Debt,-0.81
+2024,9.5,Revenues,
+2024,5.7,Total Spending,
+2024,-4.3,Deficit,
+2024,-82,Debt,-0.82
+2025,9.5,Revenues,
+2025,5.8,Total Spending,
+2025,-4.6,Deficit,
+2025,-84,Debt,-0.84
+2026,9.6,Revenues,
+2026,5.9,Total Spending,
+2026,-4.9,Deficit,
+2026,-86,Debt,-0.86
+2027,9.7,Revenues,
+2027,5.9,Total Spending,
+2027,-5.2,Deficit,
+2027,-88,Debt,-0.88
+2028,9.7,Revenues,
+2028,6,Total Spending,
+2028,-5.4,Deficit,
+2028,-90,Debt,-0.90
+2029,9.8,Revenues,
+2029,6.1,Total Spending,
+2029,-5.6,Deficit,
+2029,-92,Debt,-0.92
+2030,9.8,Revenues,
+2030,6.2,Total Spending,
+2030,-5.9,Deficit,
+2030,-94,Debt,-0.94
+2031,9.9,Revenues,
+2031,6.2,Total Spending,
+2031,-6.1,Deficit,
+2031,-97,Debt,-0.97
+2032,9.9,Revenues,
+2032,6.3,Total Spending,
+2032,-6.3,Deficit,
+2032,-99,Debt,-0.99
+2033,10,Revenues,
+2033,6.3,Total Spending,
+2033,-6.5,Deficit,
+2033,-102,Debt,-1.02
+2034,10,Revenues,
+2034,6.3,Total Spending,
+2034,-6.7,Deficit,
+2034,-105,Debt,-1.05
+2035,10.1,Revenues,
+2035,6.3,Total Spending,
+2035,-6.9,Deficit,
+2035,-107,Debt,-1.07
+2036,10.1,Revenues,
+2036,6.4,Total Spending,
+2036,-7.1,Deficit,
+2036,-110,Debt,-1.10
+2037,10.1,Revenues,
+2037,6.4,Total Spending,
+2037,-7.3,Deficit,
+2037,-113,Debt,-1.13
+2038,10.2,Revenues,
+2038,6.3,Total Spending,
+2038,-7.5,Deficit,
+2038,-116,Debt,-1.16
+2039,10.2,Revenues,
+2039,6.4,Total Spending,
+2039,-7.6,Deficit,
+2039,-119,Debt,-1.19
+2040,10.3,Revenues,
+2040,6.4,Total Spending,
+2040,-7.9,Deficit,
+2040,-122,Debt,-1.22
+2041,10.3,Revenues,
+2041,6.3,Total Spending,
+2041,-8,Deficit,
+2041,-125,Debt,-1.25
+2042,10.3,Revenues,
+2042,6.3,Total Spending,
+2042,-8.1,Deficit,
+2042,-129,Debt,-1.29
+2043,10.4,Revenues,
+2043,6.3,Total Spending,
+2043,-8.4,Deficit,
+2043,-132,Debt,-1.32
+2044,10.4,Revenues,
+2044,6.3,Total Spending,
+2044,-8.5,Deficit,
+2044,-135,Debt,-1.35
+2045,10.5,Revenues,
+2045,6.3,Total Spending,
+2045,-8.7,Deficit,
+2045,-138,Debt,-1.38
+2046,10.5,Revenues,
+2046,6.3,Total Spending,
+2046,-8.8,Deficit,
+2046,-141,Debt,-1.41
