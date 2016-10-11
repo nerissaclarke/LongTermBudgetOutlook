@@ -29,10 +29,10 @@ font-family: 'Heebo', sans-serif;
 */
 
 svg{
-  border: 1px solid black;
+  /*border: .5px solid black;*/
   display: block;
   align: center;
-  padding: 20px 10px 0px 10px;
+  padding: 20px 15px 1px 10px;
 }
 
 h1{
@@ -76,7 +76,7 @@ span {
 
 .footer{
   font-size: 11px;
-  font-family: 'helvetica'; 
+  font-family: 'Heebo'; 
 }
 
 .bar--Surplus {
@@ -122,23 +122,23 @@ font-size: 18px;
   padding: 20px 10px 10px 10px;
 }
 
+.slider{
+  font-family: 'Heebo', sans-serif;
+  font-size: 38px;
+  shape-rendering: crispEdges;
+
+}
+
 </style>
 <body>
 <g></g>
- <h1> 
 
- <!-- This is for the slider 
-1966 <input type='range' 
- min='1966' 
- max='2046' 
- step='1'
- id='yearRange'
- />2046!-->
- </h1>
-<span></span>
+
 </body>
 
 <script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="//d3plus.org/js/d3.js"></script>
+<script src="//d3plus.org/js/d3plus.js"></script>
 
 <script>
 
@@ -165,7 +165,7 @@ var xAxis = d3.svg.axis()
 var yAxis = d3.svg.axis()
     .scale(yScale)
     .orient("left")
-    .tickFormat(formatPercent)
+    .tickFormat(d3.format("%"))
     .ticks(height/50)
     .tickPadding(8)
 
@@ -199,7 +199,7 @@ svg.append("foreignObject")
 
 //Add data here  
 //Assign data to request data variable
- d3.csv("LTBOFig1-2-Mar2016Hist-66-46.csv", function(error, data) {
+ d3.csv("LTBOFig1-2-Mar2016Hist-1901-2046.csv", function(error, data) {
 
   if (error) return console.warn(error);
 
@@ -226,7 +226,7 @@ svg.append("foreignObject")
   updateChart(initialValue);
 
      d3.select("#yearRange")
-                  .on("input", function(){
+                  .on("change", function(){
                       sliderValue= +this.value;
                       
                       //remove old bars so that the update will work
@@ -306,7 +306,7 @@ var textGroup = d3.select("svg").selectAll(".textgroup")
     var surpluslabel = d3.selectAll(".text")
               .append("text")
               .attr("class", "text")
-              .text( function(d){ return (d.category == "Deficit(-)" && d.barTotal >=0 ? "Budget Surplus" :" ")})
+              .text( function(d){ return (d.category == "Budget Deficit (-)" && d.barTotal >=0 ? "Budget Surplus" :" ")})
               //.text(function(d) { return ( < 0 ? "Deficit" : "Surplus")})
            .attr("x", 335)
            .attr("y", 60)
@@ -358,6 +358,19 @@ var textGroup = d3.select("svg").selectAll(".textgroup")
         .attr("x", 180)
         .attr("y", 0)
 
+      bottomlabels.append("text")
+        .text("1966")
+        .attr("class", "slider")
+        .attr("x", 5)
+        .attr("y", 50)
+
+      bottomlabels.append("text")
+        .text("2046")
+        .attr("class", "slider")
+        .attr("x", 245)
+        .attr("y", 50)
+
+
       d3.select("svg").append("rect")
         .attr("x", "550")
         .attr("y", "400" )
@@ -372,6 +385,7 @@ var LTBOheader = svg.append("text")
           .style("text-anchor", "start")
           .attr("dx", margin.left)
           .attr("dy", "-1.25em")
+          .style("fill", function(d) {return year > 2015 ? "#be1e2d": "#0067b1"})
           .text(year + " Federal Budget Outlook")
               
     } //update chart ends 
@@ -417,18 +431,28 @@ svg.append("line")
   .attr("x1", 543)
   .attr("x2", 543)
   .attr("y1", 0)
-  .attr("y2", height+50)
+  .attr("y2", height+45)
   .style("stroke","#7f7f7f")
   .style("stroke-dasharray", "5px")
   .style("shape-rendering", "crispEdges")
   .style("stroke-width", "1.25px")
 
+
+
 var source = d3.select("svg").append("text")
           .attr("class", "footer")
           .attr("dx", "-.5em")
-          .attr("dy", "54em")
-          .text("SOURCE: OMB, Budget of the United States Government, February 2016, and CBO, Historical Budget Data, March 2016 and The Long-Term Budget Outlook, July 2016.")
-          //.style("font-family", "'oswald', light")
+          .attr("dy", "54.4em")
+          .text("SOURCE: Congressional Budget Office, The Budget and Economic Outlook, March 2016, and The Long-Term Budget Outlook, July 2016.")
+
+//var note = d3.select("svg").append("text")
+//          .attr("class", "footer")
+//          .attr("dx", "-.5em")
+ //         .attr("dy", "54.4em")
+//          .text("NOTE: Spending includes spending on all federal programs plus interest on the federal debt.")
+
+   
+
 
 })
 //This is the end of the data function
